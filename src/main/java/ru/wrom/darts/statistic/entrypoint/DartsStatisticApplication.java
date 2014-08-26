@@ -1,8 +1,6 @@
 package ru.wrom.darts.statistic.entrypoint;
 
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -11,15 +9,20 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import ru.wrom.darts.statistic.persist.entity.ApplicationInfo;
-import ru.wrom.darts.statistic.persist.entity.Dart;
+import ru.wrom.darts.statistic.persist.entity.*;
+import ru.wrom.darts.statistic.persist.repository.PlayerCrudRepository;
+import ru.wrom.darts.statistic.ui.controller.GameController;
 import ru.wrom.darts.statistic.util.SpringBeans;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class DartsStatisticApplication extends Application {
+
+	public static int TRAINING_ATTEMPT_COUNT = 2;
 
 	public static final Logger logger = LoggerFactory.getLogger(DartsStatisticApplication.class);
 
@@ -27,8 +30,18 @@ public class DartsStatisticApplication extends Application {
 
 	public static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("locale.dictionary");
 
+	public static DartsStatisticApplication instance = null;
+
 	private Stage primaryStage;
 	private BorderPane rootLayout;
+
+	public BorderPane getRootLayout() {
+		return rootLayout;
+	}
+
+	public static DartsStatisticApplication getInstance() {
+		return instance;
+	}
 
 	public static void main(String[] args) {
 		try {
@@ -43,10 +56,14 @@ public class DartsStatisticApplication extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		instance = this;
 		this.primaryStage = primaryStage;
 		this.primaryStage.setTitle(RESOURCE_BUNDLE.getString("mainFormHeader"));
+		primaryStage.setWidth(1280);
+		primaryStage.setHeight(800);
 		initRootLayout();
-		showDartList();
+		//openDartListForm();
+		openTrainingBullForm();
 	}
 
 	public void initRootLayout() {
@@ -60,12 +77,40 @@ public class DartsStatisticApplication extends Application {
 		}
 	}
 
-	public void showDartList() {
+	public void openDartListForm() {
 		try {
 			FXMLLoader fxmlLoader = new FXMLLoader();
 			fxmlLoader.setResources(RESOURCE_BUNDLE);
 			AnchorPane personOverview = fxmlLoader.load(DartsStatisticApplication.class.getResource("/form/dartList.fxml").openStream());
 			rootLayout.setCenter(personOverview);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void openTrainingBullForm() {
+		try {
+			FXMLLoader fxmlLoader = new FXMLLoader();
+			fxmlLoader.setResources(RESOURCE_BUNDLE);
+			AnchorPane personOverview = fxmlLoader.load(DartsStatisticApplication.class.getResource("/form/game.fxml").openStream());
+			rootLayout.setCenter(personOverview);
+			Game game = new Game();
+			game.setGameType(GameType.SECTOR_ATTEMPT);
+
+
+			Iterable<Player> players = SpringBeans.getBean(PlayerCrudRepository.class).findAll();
+
+
+			List<PlayerGame> playerGames = new ArrayList<>();
+			PlayerGame playerGame = new PlayerGame();
+			playerGame.setGame(game);
+			playerGame.setPlayer(players.iterator().next());
+			playerGame.setOrderNumber(1);
+
+			playerGames.add(playerGame);
+			game.setPlayerGames(playerGames);
+
+			((GameController) fxmlLoader.getController()).init(game);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -85,6 +130,10 @@ public class DartsStatisticApplication extends Application {
 			Dart dart = new Dart();
 			dart.setLabel("Noname");
 			SpringBeans.getDartCrudRepository().save(dart);
+
+			Player player = new Player();
+			player.setName("Player 1");
+			SPRING_CTX.getBean(PlayerCrudRepository.class).save(player);
 		}
 	}
 

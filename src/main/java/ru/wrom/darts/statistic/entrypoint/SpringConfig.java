@@ -1,7 +1,6 @@
 package ru.wrom.darts.statistic.entrypoint;
 
 import org.h2.jdbcx.JdbcDataSource;
-import org.h2.tools.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import java.sql.SQLException;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "ru.wrom.darts.statistic.persist.repository")
@@ -38,6 +36,7 @@ public class SpringConfig {
 		//vendorAdapter.setGenerateDdl(true);
 		factory.setPersistenceXmlLocation("eclipselink-persistence.xml");
 		factory.setDataSource(dataSource());
+		//factory.setPackagesToScan("ru.wrom.darts.statistic.persist");
 		//	factory.setLoadTimeWeaver(loadTimeWeaver());
 		factory.setJpaVendorAdapter(vendorAdapter);
 		factory.afterPropertiesSet();
