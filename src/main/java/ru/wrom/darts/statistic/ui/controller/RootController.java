@@ -1,6 +1,9 @@
 package ru.wrom.darts.statistic.ui.controller;
 
+import javafx.event.ActionEvent;
+
 import ru.wrom.darts.statistic.entrypoint.DartsStatisticApplication;
+import ru.wrom.darts.statistic.persist.entity.GameType;
 
 /**
  * Created by wrom on 18.08.2014.
@@ -8,11 +11,23 @@ import ru.wrom.darts.statistic.entrypoint.DartsStatisticApplication;
 public class RootController {
 
 	public void openTrainingBullForm() {
-		DartsStatisticApplication.getInstance().openTrainingBullForm();
+		DartsStatisticApplication.getInstance().openTrainingBullForm(GameType.BULL);
 	}
 
 	public void openDartListForm() {
 		DartsStatisticApplication.getInstance().openDartListForm();
+	}
+
+	public void openTraining60Form(ActionEvent actionEvent) {
+		DartsStatisticApplication.getInstance().openTrainingBullForm(GameType.SECTOR_ATTEMPT);
+	}
+
+	public void cancelLastAttemptInCurrentGame(ActionEvent actionEvent) {
+		DartsStatisticApplication.getInstance().cancelLastAttemptInCurrentGame();
+	}
+
+	public void openGame501Form(ActionEvent actionEvent) {
+		DartsStatisticApplication.getInstance().openTrainingBullForm(GameType.GAME_501);
 	}
 
 	/*

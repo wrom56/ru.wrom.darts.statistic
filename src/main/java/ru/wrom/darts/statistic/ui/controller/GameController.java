@@ -1,8 +1,12 @@
 package ru.wrom.darts.statistic.ui.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
@@ -11,25 +15,21 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import ru.wrom.darts.statistic.entrypoint.DartsStatisticApplication;
+import javafx.scene.input.KeyEvent;
+
 import ru.wrom.darts.statistic.persist.entity.Game;
 import ru.wrom.darts.statistic.persist.entity.PlayerGame;
 import ru.wrom.darts.statistic.persist.entity.PlayerGameAttempt;
-import ru.wrom.darts.statistic.persist.repository.GameCrudRepository;
 import ru.wrom.darts.statistic.ui.model.ScoreRow;
 import ru.wrom.darts.statistic.ui.model.StatRow;
-import ru.wrom.darts.statistic.util.SpringBeans;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import ru.wrom.darts.statistic.util.Utils;
 
 public class GameController {
 
 	private Game game;
 	private IGameManager gameManager;
 	private Integer currentDartNumber;
-	private PlayerGameAttempt currentAttempt;
+	//private PlayerGameAttempt currentAttempt;
 	private PlayerGame currentPlayerGame;
 
 	public TableView<ScoreRow> scoreTable;
@@ -38,9 +38,10 @@ public class GameController {
 	public TableColumn<ScoreRow, Integer> scoreTableScoreColumn;
 
 	public TableView<StatRow> statTable;
-	public TableColumn<StatRow, Integer> statTableLastScoreColumn;
+	public TableColumn<StatRow, String> statTablePlayerColumn;
+	public TableColumn<StatRow, String> statTableLastScoreColumn;
 	public TableColumn<StatRow, Integer> statTableAvgScoreColum;
-	public TableColumn<StatRow, Integer> statTableMaxScoreColumn;
+	public TableColumn<StatRow, String> statTableMaxScoreColumn;
 
 	public Button score0Button;
 	public Button score1Button;
@@ -57,9 +58,10 @@ public class GameController {
 		scoreTableScoreColumn.setCellValueFactory(cellData -> cellData.getValue().scoreProperty().asObject());
 		scoreTableDartCountColumn.setCellValueFactory(cellData -> cellData.getValue().dartCountProperty().asObject());
 
-		statTableLastScoreColumn.setCellValueFactory(cellData -> cellData.getValue().lastScoreProperty().asObject());
+		statTablePlayerColumn.setCellValueFactory(cellData -> cellData.getValue().playerNameProperty());
+		statTableLastScoreColumn.setCellValueFactory(cellData -> cellData.getValue().lastScoreProperty());
 		statTableAvgScoreColum.setCellValueFactory(cellData -> cellData.getValue().avgScoreProperty().asObject());
-		statTableMaxScoreColumn.setCellValueFactory(cellData -> cellData.getValue().maxScoreProperty().asObject());
+		statTableMaxScoreColumn.setCellValueFactory(cellData -> cellData.getValue().maxScoreProperty());
 	}
 
 	public void init(Game game) {
@@ -80,20 +82,69 @@ public class GameController {
 		playerScoreList.addAll(game.getPlayerGames().stream().map(playerGame -> new ScoreRow(playerGame)).collect(Collectors.toList()));
 		scoreTable.setItems(playerScoreList);
 
-
 		ObservableList<StatRow> statList = FXCollections.observableArrayList();
 		statList.addAll(game.getPlayerGames().stream().map(playerGame -> new StatRow(playerGame)).collect(Collectors.toList()));
 		statTable.setItems(statList);
 
-		nextAttempt();
+		currentPlayerGame = game.getPlayerGames().get(0);
+
+		startNextAttempt();
+
+		addKeyTypedEvent(dart1ScoreTextField);
+		addKeyTypedEvent(dart2ScoreTextField);
+		addKeyTypedEvent(dart3ScoreTextField);
+
+		addKeyReleasedEvent(dart1ScoreTextField, dart2ScoreTextField);
+		addKeyReleasedEvent(dart2ScoreTextField, dart3ScoreTextField);
+
+		dart3ScoreTextField.addEventFilter(KeyEvent.KEY_RELEASED, keyEvent -> {
+			if (Utils.isDartMaxValue(dart3ScoreTextField.getText())) {
+				submitCurrentAttemptScore();
+			}
+		});
 		refreshForm();
 	}
 
-	private void nextAttempt() {
+	private void addKeyTypedEvent(TextField textField) {
+		textField.addEventFilter(KeyEvent.KEY_TYPED, keyEvent -> {
+					String newCharacter = keyEvent.getCharacter();
+					if ("вВd".contains(newCharacter)) {
+						newCharacter = "D";
+					} else if ("еЕt".contains(newCharacter)) {
+						newCharacter = "T";
+					}
+					keyEvent.consume();
 
+					if (Utils.validDartEditValue(textField.getText() + newCharacter)) {
+						textField.appendText(newCharacter);
+					} else if (Utils.validDartEditValue(newCharacter)) {
+						textField.setText("");
+						textField.appendText(newCharacter);
+					}
+				}
+		);
+	}
+
+	private void addKeyReleasedEvent(TextField currentTextField, TextField nextTextField) {
+		currentTextField.addEventFilter(KeyEvent.KEY_RELEASED, keyEvent -> {
+			if (Utils.isDartMaxValue(currentTextField.getText())) {
+				nextTextField.requestFocus();
+			}
+		});
+	}
+
+	private void startNextAttempt() {
+		dart1ScoreTextField.setText("");
+		dart2ScoreTextField.setText("");
+		dart3ScoreTextField.setText("");
+		attemptScoreTextField.setText("");
+		currentDartNumber = 1;
+		dart1ScoreTextField.requestFocus();
+
+/*
 		if (currentAttempt != null) {
 			if (currentAttempt.getTotalScore() == null) {
-				currentAttempt.setTotalScore(getInt(currentAttempt.getDart1Score()) + getInt(currentAttempt.getDart2Score()) + getInt(currentAttempt.getDart3Score()));
+				currentAttempt.setTotalScore(Utils.getScoreAsInt(currentAttempt.getDart1Score()) + Utils.getScoreAsInt(currentAttempt.getDart2Score()) + Utils.getScoreAsInt(currentAttempt.getDart3Score()));
 				currentAttempt.setUsedDarts(3);
 			}
 			currentPlayerGame.addAttempt(currentAttempt);
@@ -107,44 +158,48 @@ public class GameController {
 
 		currentAttempt = new PlayerGameAttempt();
 		currentDartNumber = 1;
-	}
 
+		*/
+	}
 
 	private int getInt(Integer integer) {
 		return integer != null ? integer : 0;
 	}
 
-
 	private void refreshForm() {
-		dart1ScoreTextField.setText(Objects.toString(currentAttempt.getDart1Score(), ""));
-		dart2ScoreTextField.setText(Objects.toString(currentAttempt.getDart2Score(), ""));
-		dart3ScoreTextField.setText(Objects.toString(currentAttempt.getDart3Score(), ""));
-		attemptScoreTextField.setText(Objects.toString(currentAttempt.getTotalScore(), ""));
-
 
 		for (ScoreRow scoreRow : scoreTable.getItems()) {
 			scoreRow.setDartCount(getInt(scoreRow.getPlayerGame().getDartCount()));
 			List<PlayerGameAttempt> attempts = scoreRow.getPlayerGame().getAttempts();
 			if (attempts.size() > 0) {
 				scoreRow.setLastAttemptScore(attempts.get(attempts.size() - 1).getTotalScore());
+			} else {
+				scoreRow.setLastAttemptScore(0);
 			}
 			scoreRow.setScore(getInt(scoreRow.getPlayerGame().getTotalScore()));
 
 			if (isCurrentPlayerGame(scoreRow.getPlayerGame())) {
 				scoreRow.setDartCount(scoreRow.getDartCount() + currentDartNumber - 1);
-				scoreRow.setScore(scoreRow.getScore() + currentAttempt.getDartsScoreSum());
+				scoreRow.setScore(scoreRow.getScore() + getCurentAttemptScore());
 			}
 		}
 
-		statTable.getItems().stream().filter(statRow -> statRow.getPlayerGame().getAttempts().size() > 0).forEach(statRow -> {
-					List<PlayerGameAttempt> attempts = statRow.getPlayerGame().getAttempts();
-					statRow.setLastScore(attempts.get(attempts.size() - 1).getTotalScore());
-					statRow.setMaxScore(attempts.stream().max((o1, o2) -> o1.getTotalScore().compareTo(o2.getTotalScore())).get().getTotalScore());
-					if (statRow.getPlayerGame().getDartCount() > 0) {
-						statRow.setAvgScore(getInt(statRow.getPlayerGame().getTotalScore()) / (statRow.getPlayerGame().getDartCount() / 3));
-					}
+		for (StatRow statRow : statTable.getItems()) {
+			if (statRow.getPlayerGame().getAttempts().size() > 0) {
+				List<PlayerGameAttempt> attempts = statRow.getPlayerGame().getAttempts();
+				statRow.setLastScore(Utils.getAttemptScore(attempts.get(attempts.size() - 1)));
+				statRow.setMaxScore(Utils.getAttemptScore(attempts.stream().max((o1, o2) -> o1.getTotalScore().compareTo(o2.getTotalScore())).get()));
+				if (statRow.getPlayerGame().getDartCount() > 0) {
+					statRow.setAvgScore(getInt(statRow.getPlayerGame().getTotalScore()) / (statRow.getPlayerGame().getDartCount() / 3));
+				} else {
+					statRow.setAvgScore(0);
 				}
-		);
+			} else {
+				statRow.setLastScore("");
+				statRow.setMaxScore("");
+				statRow.setAvgScore(0);
+			}
+		}
 	}
 
 	private boolean isCurrentPlayerGame(PlayerGame playerGame) {
@@ -152,52 +207,127 @@ public class GameController {
 	}
 
 	public void onClickScore0Button() {
-		setDartScore(gameManager.getScoreButtonValues().get(0));
+		onClickScoreButton(gameManager.getScoreButtonValues().get(0));
 	}
 
 	public void onClickScore1Button() {
-		setDartScore(gameManager.getScoreButtonValues().get(1));
+		onClickScoreButton(gameManager.getScoreButtonValues().get(1));
 	}
 
 	public void onClickScore2Button() {
-		setDartScore(gameManager.getScoreButtonValues().get(2));
+		onClickScoreButton(gameManager.getScoreButtonValues().get(2));
 	}
 
 	public void onClickScore3Button() {
-		setDartScore(gameManager.getScoreButtonValues().get(3));
+		onClickScoreButton(gameManager.getScoreButtonValues().get(3));
 	}
 
-
-	private void setDartScore(Integer score) {
-
-		switch (currentDartNumber) {
-			case 1:
-				currentAttempt.setDart1Score(score);
-				break;
-			case 2:
-				currentAttempt.setDart2Score(score);
-				break;
-			case 3:
-				currentAttempt.setDart3Score(score);
-				break;
+	private void onClickScoreButton(List<String> scoreButtonValues) {
+		if (scoreButtonValues == null) {
+			return;
 		}
-
-		if (currentDartNumber == 3) {
-			nextAttempt();
-			checkEndGame();
-		} else {
-			currentDartNumber++;
+		for (String score : scoreButtonValues) {
+			setDartScore(currentDartNumber, score);
+			if (currentDartNumber == 3) {
+				submitCurrentAttemptScore();
+				break;
+			} else {
+				currentDartNumber++;
+			}
 		}
 		refreshForm();
 	}
 
+	private void setDartScore(Integer dartNumber, String score) {
+		switch (dartNumber) {
+		case 1:
+			dart1ScoreTextField.setText(score);
+			break;
+		case 2:
+			dart2ScoreTextField.setText(score);
+			break;
+		case 3:
+			dart3ScoreTextField.setText(score);
+			break;
+		}
+	}
+
 	private void checkEndGame() {
-		if (game.getPlayerGames().get(0).getAttempts().size() == DartsStatisticApplication.TRAINING_ATTEMPT_COUNT) {
+	/*	if (game.getPlayerGames().get(0).getAttempts().size() == DartsStatisticApplication.TRAINING_ATTEMPT_COUNT) {
 			SpringBeans.getBean(GameCrudRepository.class).save(game);
 			currentAttempt = new PlayerGameAttempt();
 		}
+*/
+	}
+
+	private void submitCurrentAttemptScore() {
+
+		PlayerGameAttempt attempt = buildCurrentAttempt();
+		if (attempt == null) {
+			return;
+		}
+
+		currentPlayerGame.addAttempt(attempt);
+		nextPlayer();
+		startNextAttempt();
+		//checkEndGame();
+
+		refreshForm();
 
 	}
 
+	private void nextPlayer() {
+		if (currentPlayerGame.getOrderNumber() == game.getPlayerGames().size()) {
+			currentPlayerGame = game.getPlayerGames().get(0);
+		} else {
+			currentPlayerGame = game.getPlayerGames().get(currentPlayerGame.getOrderNumber());
+		}
+	}
 
+	private PlayerGame getPreviousPlayerGame() {
+		if (currentPlayerGame.getOrderNumber() == 1) {
+			return game.getPlayerGames().get(game.getPlayerGames().size() - 1);
+		} else {
+			return game.getPlayerGames().get(currentPlayerGame.getOrderNumber() - 2);
+		}
+	}
+
+	public void onClickSubmitScoreButton(ActionEvent actionEvent) {
+		submitCurrentAttemptScore();
+	}
+
+	public int getCurentAttemptScore() {
+		PlayerGameAttempt attempt = buildCurrentAttempt();
+		return attempt != null ? attempt.getTotalScore() : 0;
+	}
+
+	private PlayerGameAttempt buildCurrentAttempt() {
+		PlayerGameAttempt attempt = new PlayerGameAttempt();
+		if (!Utils.isEmpty(attemptScoreTextField.getText())) {
+			attempt.setUsedDarts(3);
+			attempt.setTotalScore(Integer.valueOf(attemptScoreTextField.getText()));
+		} else {
+			if (Utils.isEmpty(dart1ScoreTextField.getText()) && Utils.isEmpty(dart2ScoreTextField.getText()) && Utils.isEmpty(dart3ScoreTextField.getText())) {
+				return null;
+			}
+
+			attempt.setDart1Score(Utils.isEmpty(dart1ScoreTextField.getText()) ? "0" : dart1ScoreTextField.getText());
+			attempt.setDart2Score(Utils.isEmpty(dart2ScoreTextField.getText()) ? "0" : dart2ScoreTextField.getText());
+			attempt.setDart3Score(Utils.isEmpty(dart3ScoreTextField.getText()) ? "0" : dart3ScoreTextField.getText());
+
+			attempt.setUsedDarts(3);
+			attempt.setTotalScore(Utils.getScoreAsInt(dart1ScoreTextField.getText()) + Utils.getScoreAsInt(dart2ScoreTextField.getText()) + Utils.getScoreAsInt(dart3ScoreTextField.getText()));
+		}
+		return attempt;
+	}
+
+	public void cancelLastAttempt() {
+		PlayerGame playerGame = getPreviousPlayerGame();
+		if (playerGame.getAttempts().size() > 0) {
+			playerGame.getAttempts().remove(playerGame.getAttempts().size() - 1);
+		}
+		currentPlayerGame = playerGame;
+		startNextAttempt();
+		refreshForm();
+	}
 }

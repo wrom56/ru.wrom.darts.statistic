@@ -1,5 +1,11 @@
 package ru.wrom.darts.statistic.entrypoint;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.ResourceBundle;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -9,20 +15,18 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import ru.wrom.darts.statistic.persist.entity.*;
+
+import ru.wrom.darts.statistic.persist.entity.ApplicationInfo;
+import ru.wrom.darts.statistic.persist.entity.Dart;
+import ru.wrom.darts.statistic.persist.entity.Game;
+import ru.wrom.darts.statistic.persist.entity.GameType;
+import ru.wrom.darts.statistic.persist.entity.Player;
+import ru.wrom.darts.statistic.persist.entity.PlayerGame;
 import ru.wrom.darts.statistic.persist.repository.PlayerCrudRepository;
 import ru.wrom.darts.statistic.ui.controller.GameController;
 import ru.wrom.darts.statistic.util.SpringBeans;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
-
 public class DartsStatisticApplication extends Application {
-
-	public static int TRAINING_ATTEMPT_COUNT = 2;
 
 	public static final Logger logger = LoggerFactory.getLogger(DartsStatisticApplication.class);
 
@@ -34,6 +38,7 @@ public class DartsStatisticApplication extends Application {
 
 	private Stage primaryStage;
 	private BorderPane rootLayout;
+	private GameController currentGameController;
 
 	public BorderPane getRootLayout() {
 		return rootLayout;
@@ -63,7 +68,7 @@ public class DartsStatisticApplication extends Application {
 		primaryStage.setHeight(800);
 		initRootLayout();
 		//openDartListForm();
-		openTrainingBullForm();
+		openTrainingBullForm(GameType.GAME_501);
 	}
 
 	public void initRootLayout() {
@@ -88,14 +93,15 @@ public class DartsStatisticApplication extends Application {
 		}
 	}
 
-	public void openTrainingBullForm() {
+	public void openTrainingBullForm(GameType gameType) {
 		try {
 			FXMLLoader fxmlLoader = new FXMLLoader();
 			fxmlLoader.setResources(RESOURCE_BUNDLE);
 			AnchorPane personOverview = fxmlLoader.load(DartsStatisticApplication.class.getResource("/form/game.fxml").openStream());
 			rootLayout.setCenter(personOverview);
 			Game game = new Game();
-			game.setGameType(GameType.SECTOR_ATTEMPT);
+			//	game.setGameType(GameType.SECTOR_ATTEMPT);
+			game.setGameType(gameType);
 
 
 			Iterable<Player> players = SpringBeans.getBean(PlayerCrudRepository.class).findAll();
@@ -110,10 +116,16 @@ public class DartsStatisticApplication extends Application {
 			playerGames.add(playerGame);
 			game.setPlayerGames(playerGames);
 
-			((GameController) fxmlLoader.getController()).init(game);
+			currentGameController = fxmlLoader.getController();
+			currentGameController.init(game);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void cancelLastAttemptInCurrentGame() {
+		currentGameController.cancelLastAttempt();
 	}
 
 	public Stage getPrimaryStage() {
