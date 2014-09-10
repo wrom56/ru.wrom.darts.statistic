@@ -1,11 +1,5 @@
 package ru.wrom.darts.statistic.entrypoint;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,16 +9,16 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import ru.wrom.darts.statistic.persist.entity.ApplicationInfo;
-import ru.wrom.darts.statistic.persist.entity.Dart;
-import ru.wrom.darts.statistic.persist.entity.Game;
-import ru.wrom.darts.statistic.persist.entity.GameType;
-import ru.wrom.darts.statistic.persist.entity.Player;
-import ru.wrom.darts.statistic.persist.entity.PlayerGame;
+import ru.wrom.darts.statistic.persist.entity.*;
 import ru.wrom.darts.statistic.persist.repository.PlayerCrudRepository;
 import ru.wrom.darts.statistic.ui.controller.GameController;
 import ru.wrom.darts.statistic.util.SpringBeans;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.ResourceBundle;
 
 public class DartsStatisticApplication extends Application {
 
@@ -68,7 +62,7 @@ public class DartsStatisticApplication extends Application {
 		primaryStage.setHeight(800);
 		initRootLayout();
 		//openDartListForm();
-		openTrainingBullForm(GameType.GAME_501);
+		openTrainingBullForm(GameType.BULL);
 	}
 
 	public void initRootLayout() {

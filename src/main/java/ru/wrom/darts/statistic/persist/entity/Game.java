@@ -1,6 +1,5 @@
 package ru.wrom.darts.statistic.persist.entity;
 
-
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;

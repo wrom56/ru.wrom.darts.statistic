@@ -1,17 +1,8 @@
 package ru.wrom.darts.statistic.persist.entity;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Transient;
 
 @Entity
 public class PlayerGame {
@@ -23,12 +14,13 @@ public class PlayerGame {
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Game game;
 
-
-	private Integer orderNumber;
+	private int orderNumber;
 
 	private Player player;
 
 	private Dart dart;
+
+	private int dartCount;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "PlayerGame")
 	private List<PlayerGameAttempt> attempts;
@@ -88,21 +80,20 @@ public class PlayerGame {
 		this.dart = dart;
 	}
 
-	@Transient
-	public int getDartCount() {
-		int result = 0;
-		for (PlayerGameAttempt attempt : getAttempts()) {
-			result += attempt.getUsedDarts();
-		}
-		return result;
-	}
-
-	public Integer getOrderNumber() {
+	public int getOrderNumber() {
 		return orderNumber;
 	}
 
-	public void setOrderNumber(Integer orderNumber) {
+	public void setOrderNumber(int orderNumber) {
 		this.orderNumber = orderNumber;
+	}
+
+	public int getDartCount() {
+		return dartCount;
+	}
+
+	public void setDartCount(int dartCount) {
+		this.dartCount = dartCount;
 	}
 }
 

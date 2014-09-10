@@ -1,4 +1,7 @@
 .table-cell {
-	-fx-font-size: 14px;
+	-fx-font-size: 26px;
 }
 
+.scoreButton {
+	-fx-font-size: 55px;
+}

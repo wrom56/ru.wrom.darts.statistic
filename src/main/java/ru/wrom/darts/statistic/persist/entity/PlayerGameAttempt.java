@@ -1,18 +1,9 @@
 package ru.wrom.darts.statistic.persist.entity;
 
-import java.util.Date;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-
 import ru.wrom.darts.statistic.util.Utils;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class PlayerGameAttempt {
@@ -32,7 +23,7 @@ public class PlayerGameAttempt {
 
 	private Integer totalScore;
 
-	private Integer usedDarts;
+	private boolean isLegalAttempt;
 
 	public Integer getId() {
 		return id;
@@ -90,12 +81,12 @@ public class PlayerGameAttempt {
 		this.totalScore = totalScore;
 	}
 
-	public Integer getUsedDarts() {
-		return usedDarts;
+	public boolean isLegalAttempt() {
+		return isLegalAttempt;
 	}
 
-	public void setUsedDarts(Integer usedDarts) {
-		this.usedDarts = usedDarts;
+	public void setLegalAttempt(boolean isLegalAttempt) {
+		this.isLegalAttempt = isLegalAttempt;
 	}
 
 	@Transient
