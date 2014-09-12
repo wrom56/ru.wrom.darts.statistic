@@ -3,7 +3,9 @@ package ru.wrom.darts.statistic.persist.entity;
 import ru.wrom.darts.statistic.util.Utils;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class PlayerGameAttempt {
@@ -92,6 +94,34 @@ public class PlayerGameAttempt {
 	@Transient
 	public int getDartsScoreSum() {
 		return Utils.getScoreAsInt(dart1Score) + Utils.getScoreAsInt(dart2Score) + Utils.getScoreAsInt(dart3Score);
+	}
+
+	@Transient
+	public List<String> getDartScoreList() {
+		return Arrays.asList(dart1Score, dart2Score, dart3Score);
+	}
+
+	@Transient
+	public Integer getLastDartNumber() {
+		if (Utils.getScoreAsInt(dart3Score) > 0) {
+			return 3;
+		}
+		if (Utils.getScoreAsInt(dart2Score) > 0) {
+			return 2;
+		}
+		if (Utils.getScoreAsInt(dart1Score) > 0) {
+			return 1;
+		}
+		return null;
+	}
+
+	@Transient
+	public String getLastDartScore() {
+		Integer dartNumber = getLastDartNumber();
+		if (dartNumber == null) {
+			return null;
+		}
+		return getDartScoreList().get(dartNumber - 1);
 	}
 
 }

@@ -1,7 +1,25 @@
-.table-cell {
+.cell {
+	-fx-alignment: center
+}
+
+.score-table .cell {
 	-fx-font-size: 26px;
 }
 
+.score-table-player-column {
+	-fx-alignment: center-left
+}
+
+
+
 .scoreButton {
-	-fx-font-size: 55px;
+	-fx-font-size: 36px;
+}
+
+.incorrectScore {
+	-fx-border-color: red;
+}
+
+.attempt-tip-label {
+	-fx-font-size: 36px;
 }

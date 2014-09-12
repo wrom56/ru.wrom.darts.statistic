@@ -50,8 +50,10 @@ public class PlayerGame {
 
 	public Integer getTotalScore() {
 		int totalScore = 0;
-		for (PlayerGameAttempt attempt : attempts) {
-			totalScore += attempt.getTotalScore();
+		for (PlayerGameAttempt attempt : getAttempts()) {
+			if (attempt.isLegalAttempt()) {
+				totalScore += attempt.getTotalScore();
+			}
 		}
 		return totalScore;
 	}

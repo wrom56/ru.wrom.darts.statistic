@@ -1,9 +1,10 @@
 package ru.wrom.darts.statistic.ui.controller.gamemanager;
 
+import ru.wrom.darts.statistic.persist.entity.PlayerGame;
+import ru.wrom.darts.statistic.ui.controller.IGameManager;
+
 import java.util.Arrays;
 import java.util.List;
-
-import ru.wrom.darts.statistic.ui.controller.IGameManager;
 
 public class Sector60GameManager implements IGameManager {
 	@Override
@@ -14,5 +15,15 @@ public class Sector60GameManager implements IGameManager {
 	@Override
 	public List<String> getScoreButtonLabels() {
 		return Arrays.asList("0", "20", "D20", "T20");
+	}
+
+	@Override
+	public String getGameLabel() {
+		return "Sector 60";
+	}
+
+	@Override
+	public String getAttemptTip(PlayerGame playerGame, String dart1Score, String dart2Score) {
+		return "180 = T20 + T20 + T20";
 	}
 }

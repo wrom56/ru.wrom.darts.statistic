@@ -10,7 +10,6 @@ public class ScoreRow {
 	private PlayerGame playerGame;
 	private StringProperty playerName = new SimpleStringProperty();
 	private IntegerProperty dartCount = new SimpleIntegerProperty();
-	private IntegerProperty lastAttemptScore = new SimpleIntegerProperty();
 	private IntegerProperty score = new SimpleIntegerProperty();
 
 	public ScoreRow(PlayerGame playerGame) {
@@ -52,18 +51,6 @@ public class ScoreRow {
 
 	public void setDartCount(int dartCount) {
 		this.dartCount.set(dartCount);
-	}
-
-	public int getLastAttemptScore() {
-		return lastAttemptScore.get();
-	}
-
-	public IntegerProperty lastAttemptScoreProperty() {
-		return lastAttemptScore;
-	}
-
-	public void setLastAttemptScore(int lastAttemptScore) {
-		this.lastAttemptScore.set(lastAttemptScore);
 	}
 
 	public PlayerGame getPlayerGame() {

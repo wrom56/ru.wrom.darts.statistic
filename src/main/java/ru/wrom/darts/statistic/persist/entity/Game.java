@@ -72,6 +72,17 @@ public class Game {
 	public void setPlayerGames(List<PlayerGame> playerGames) {
 		this.playerGames = playerGames;
 	}
+
+	@Transient
+	public int getPlayerAttemptCount() {
+		int result = 0;
+		for (PlayerGame playerGame : getPlayerGames()) {
+			if (result < playerGame.getAttempts().size()) {
+				result = playerGame.getAttempts().size();
+			}
+		}
+		return result;
+	}
 }
 
 
