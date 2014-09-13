@@ -17,16 +17,20 @@ public class PlayerGameAttempt {
 	private Date attemptDate;
 
 	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(nullable = false)
 	private PlayerGame playerGame;
 
 	private String dart1Score;
 	private String dart2Score;
 	private String dart3Score;
 
+	@Column(nullable = false)
 	private int totalScore;
 
+	@Column(nullable = false)
 	private boolean isLegalAttempt;
 
+	@Column(nullable = false)
 	private int dartCount;
 
 	public Integer getId() {

@@ -14,14 +14,18 @@ public class PlayerGame {
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Game game;
 
+	@Column(nullable = false)
 	private int orderNumber;
 
+	@JoinColumn(nullable = false)
 	private Player player;
 
 	private Dart dart;
 
+	@Column(nullable = false)
 	private int dartCount;
 
+	@Column(nullable = false)
 	private int totalScore;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "PlayerGame")
