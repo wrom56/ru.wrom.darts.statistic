@@ -27,6 +27,7 @@ import ru.wrom.darts.statistic.util.SpringBeans;
 import ru.wrom.darts.statistic.util.Utils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -123,6 +124,7 @@ public class GameController {
 
 		isGameOver = false;
 		this.game = game;
+		this.game.setStartDate(new Date());
 		this.gameManager = GameManagerFactory.buildGameManager(game.getGameType());
 
 		scoreTableHeaderColumn.setText(gameManager.getGameLabel());
@@ -418,6 +420,7 @@ public class GameController {
 
 				dialog.initOwner(DartsStatisticApplication.getInstance().getPrimaryStage());
 				dialog.show();
+				game.setEndDate(new Date());
 				SpringBeans.getBean(GameCrudRepository.class).save(game);
 
 			} else {
@@ -565,6 +568,7 @@ public class GameController {
 
 			attempt.setTotalScore(Utils.getScoreAsInt(attempt.getDart1Score()) + Utils.getScoreAsInt(attempt.getDart2Score()) + Utils.getScoreAsInt(attempt.getDart3Score()));
 		}
+		attempt.setAttemptDate(new Date());
 		return attempt;
 	}
 

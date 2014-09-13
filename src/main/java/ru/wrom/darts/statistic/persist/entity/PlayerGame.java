@@ -47,6 +47,7 @@ public class PlayerGame {
 	}
 
 	public void addAttempt(PlayerGameAttempt attempt) {
+		attempt.setPlayerGame(this);
 		getAttempts().add(attempt);
 		dartCount += attempt.getDartCount();
 		if (attempt.isLegalAttempt()) {
