@@ -19,6 +19,7 @@ import ru.wrom.darts.statistic.entrypoint.DartsStatisticApplication;
 import ru.wrom.darts.statistic.persist.entity.Game;
 import ru.wrom.darts.statistic.persist.entity.PlayerGame;
 import ru.wrom.darts.statistic.persist.entity.PlayerGameAttempt;
+import ru.wrom.darts.statistic.persist.repository.GameRepository;
 import ru.wrom.darts.statistic.persist.repository.crud.GameCrudRepository;
 import ru.wrom.darts.statistic.ui.model.AttemptRow;
 import ru.wrom.darts.statistic.ui.model.RecordRow;
@@ -54,9 +55,9 @@ public class GameController {
 	public TableColumn<AttemptRow, Integer> attemptsTableNumberColumn;
 
 	public TableView<RecordRow> recordTable;
-	public TableColumn<RecordRow, String> recordTableRecordTypeColumn;
-	public TableColumn<RecordRow, String> recordTableAbsoluteValueColumn;
-	public TableColumn<RecordRow, String> recordTableSameDartValueColumn;
+	public TableColumn<RecordRow, String> recordTableRecordLabelColumn;
+	public TableColumn<RecordRow, String> recordTableBestColumn;
+	public TableColumn<RecordRow, String> recordTableAvgColumn;
 
 	public Button score0Button;
 	public Button score1Button;
@@ -88,13 +89,19 @@ public class GameController {
 			attemptsTableHeaderColumn.getColumns().add(column);
 		}
 
-		recordTableRecordTypeColumn.setCellValueFactory(cellData -> cellData.getValue().recordTypeProperty());
-		recordTableAbsoluteValueColumn.setCellValueFactory(cellData -> cellData.getValue().absoluteValueProperty());
-		recordTableSameDartValueColumn.setCellValueFactory(cellData -> cellData.getValue().sameDartValueProperty());
+		recordTableRecordLabelColumn.setCellValueFactory(cellData -> cellData.getValue().recordLabelProperty());
+		recordTableBestColumn.setCellValueFactory(cellData -> cellData.getValue().bestValueProperty());
+		recordTableAvgColumn.setCellValueFactory(cellData -> cellData.getValue().avgValueProperty());
 
 
 		ObservableList<RecordRow> recordRowList = FXCollections.observableArrayList();
 
+		GameRepository gameRepository = SpringBeans.getBean(GameRepository.class);
+		recordRowList.add(new RecordRow("Absolute score record", Utils.getScoreRecordMessage(gameRepository.getMaxScore(game.getGameType(), null, null, null)), Utils.getAvgScoreRecordMessage(gameRepository.getAvgScore(game.getGameType(), null, null, null))));
+		recordRowList.add(new RecordRow("Absolute dart count record", Utils.getDartCountRecordMessage(gameRepository.getMinDartCount(game.getGameType(), null, null, null), game.getGameType().getStartScore()), Utils.getAvgDartCountRecordMessage(gameRepository.getAvgDartCount(game.getGameType(), null, null, null), game.getGameType().getStartScore())));
+
+
+		recordTable.setItems(recordRowList);
 
 		ObservableMap<KeyCombination, Runnable> accelerators = score1Button.getScene().getAccelerators();
 		accelerators.put(new KeyCodeCombination(KeyCode.NUMPAD0), () -> score0Button.fire());
@@ -277,8 +284,8 @@ public class GameController {
 		for (ScoreRow scoreRow : scoreTable.getItems()) {
 			scoreRow.setDartCount(getInt(scoreRow.getPlayerGame().getDartCount()));
 			int currentScore = getInt(scoreRow.getPlayerGame().getTotalScore());
-			if (gameManager.getStartScore() > 0) {
-				scoreRow.setScore(gameManager.getStartScore() - currentScore);
+			if (game.getGameType().getStartScore() > 0) {
+				scoreRow.setScore(game.getGameType().getStartScore() - currentScore);
 			} else {
 				scoreRow.setScore(currentScore);
 			}
@@ -413,6 +420,7 @@ public class GameController {
 			refreshForm();
 
 			if (gameManager.isEndOfGame(game)) {
+				currentPlayerGame.setFinished(true);
 				isGameOver = true;
 				Stage dialog = new Stage();
 				Scene scene = new Scene(new Group(new Text(25, 25, "Hello World!")));

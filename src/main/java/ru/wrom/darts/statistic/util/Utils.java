@@ -4,6 +4,7 @@ import ru.wrom.darts.statistic.entrypoint.DartsConstants;
 import ru.wrom.darts.statistic.persist.entity.PlayerGameAttempt;
 import ru.wrom.darts.statistic.ui.controller.ScoreElement;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -162,4 +163,26 @@ public class Utils {
 		}
 		return result;
 	}
+
+	public static String getScoreRecordMessage(int score) {
+		return MessageFormat.format("{0} ({1,number,0.00})", score, calculateAvgAttemptScore(score, DartsConstants.TRAINING_DART_COUNT));
+	}
+
+	public static String getAvgScoreRecordMessage(double avgScore) {
+		return MessageFormat.format("{0,number,0.00} ({1,number,0.00})", avgScore, calculateAvgAttemptScore(avgScore, DartsConstants.TRAINING_DART_COUNT));
+	}
+
+
+	public static String getDartCountRecordMessage(int dartCount, int score) {
+		return MessageFormat.format("{0} ({1,number,0.00})", dartCount, calculateAvgAttemptScore(score, dartCount));
+	}
+
+	public static String getAvgDartCountRecordMessage(double avgDartCount, int score) {
+		return MessageFormat.format("{0,number,0.00} ({1,number,0.00})", avgDartCount, calculateAvgAttemptScore(score, avgDartCount));
+	}
+
+	private static double calculateAvgAttemptScore(double score, double dartCount) {
+		return dartCount > 0.0000001 ? score / dartCount * 3 : 0;
+	}
+
 }

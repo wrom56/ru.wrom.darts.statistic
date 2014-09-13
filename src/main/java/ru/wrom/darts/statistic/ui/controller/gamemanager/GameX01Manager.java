@@ -1,17 +1,20 @@
 package ru.wrom.darts.statistic.ui.controller.gamemanager;
 
 import ru.wrom.darts.statistic.entrypoint.DartsStatisticApplication;
-import ru.wrom.darts.statistic.persist.entity.Checkout;
-import ru.wrom.darts.statistic.persist.entity.Game;
-import ru.wrom.darts.statistic.persist.entity.PlayerGame;
-import ru.wrom.darts.statistic.persist.entity.PlayerGameAttempt;
+import ru.wrom.darts.statistic.persist.entity.*;
 import ru.wrom.darts.statistic.ui.controller.IGameManager;
 import ru.wrom.darts.statistic.util.Utils;
 
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class AbstractGameX01Manager implements IGameManager {
+public class GameX01Manager implements IGameManager {
+
+	private GameType gameType;
+
+	public GameX01Manager(GameType gameType) {
+		this.gameType = gameType;
+	}
 
 	@Override
 	public List<List<String>> getScoreButtonValues() {
@@ -25,12 +28,12 @@ public abstract class AbstractGameX01Manager implements IGameManager {
 
 	@Override
 	public String getGameLabel() {
-		return String.valueOf(getStartScore());
+		return String.valueOf(gameType.getStartScore());
 	}
 
 	@Override
 	public String getAttemptTip(PlayerGame playerGame, String dart1Score, String dart2Score) {
-		int currentScore = getStartScore() - playerGame.getTotalScore() - Utils.getScoreAsInt(dart1Score) - Utils.getScoreAsInt(dart2Score);
+		int currentScore = gameType.getStartScore() - playerGame.getTotalScore() - Utils.getScoreAsInt(dart1Score) - Utils.getScoreAsInt(dart2Score);
 
 		Checkout checkout = DartsStatisticApplication.getInstance().getCheckoutMap().get(currentScore);
 
@@ -43,11 +46,11 @@ public abstract class AbstractGameX01Manager implements IGameManager {
 
 	@Override
 	public boolean isLegalAttempt(PlayerGame playerGame, PlayerGameAttempt attempt) {
-		if (getStartScore() - (playerGame.getTotalScore() + attempt.getTotalScore()) > 1) {
+		if (gameType.getStartScore() - (playerGame.getTotalScore() + attempt.getTotalScore()) > 1) {
 			return true;
 		}
 
-		if (getStartScore() - (playerGame.getTotalScore() + attempt.getTotalScore()) == 0) {
+		if (gameType.getStartScore() - (playerGame.getTotalScore() + attempt.getTotalScore()) == 0) {
 			if (Utils.isDoubleSectorScore(attempt.getLastDartScore())) {
 				return true;
 			}
@@ -58,7 +61,7 @@ public abstract class AbstractGameX01Manager implements IGameManager {
 	@Override
 	public boolean isEndOfGame(Game game) {
 		for (PlayerGame playerGame : game.getPlayerGames()) {
-			if (playerGame.getTotalScore() == getStartScore()) {
+			if (playerGame.getTotalScore() == gameType.getStartScore()) {
 				return true;
 			}
 		}
@@ -67,7 +70,7 @@ public abstract class AbstractGameX01Manager implements IGameManager {
 
 	@Override
 	public ScoreEnteringType getScoreEnteringType(PlayerGame playerGame) {
-		if (getStartScore() - playerGame.getTotalScore() <= 170) {
+		if (gameType.getStartScore() - playerGame.getTotalScore() <= 170) {
 			return ScoreEnteringType.DART;
 		} else {
 			return ScoreEnteringType.TOTAL;
@@ -77,7 +80,7 @@ public abstract class AbstractGameX01Manager implements IGameManager {
 	@Override
 	public int getAttemptDartCount(PlayerGame playerGame, PlayerGameAttempt attempt) {
 		if (attempt.isLegalAttempt()) {
-			if (playerGame.getTotalScore() + attempt.getTotalScore() == getStartScore()) {
+			if (playerGame.getTotalScore() + attempt.getTotalScore() == gameType.getStartScore()) {
 				if (Utils.getScoreAsInt(attempt.getDart3Score()) > 0) {
 					return 3;
 				} else if (Utils.getScoreAsInt(attempt.getDart2Score()) > 0) {

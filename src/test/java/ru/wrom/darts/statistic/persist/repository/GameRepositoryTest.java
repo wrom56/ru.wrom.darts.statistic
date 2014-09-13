@@ -25,6 +25,7 @@ public class GameRepositoryTest {
 		System.out.println(query.getSingleResult());
 		System.out.println("!!!!!!!!!!!!!");
 	*/
-		System.out.println(gameRepository.getMaxScore(GameType.BULL, null));
+		System.out.println(gameRepository.getAvgDartCount(GameType.GAME_501, null, null, null));
 	}
+
 }

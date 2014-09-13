@@ -28,6 +28,9 @@ public class PlayerGame {
 	@Column(nullable = false)
 	private int totalScore;
 
+	@Column(nullable = false)
+	private boolean isFinished;
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "PlayerGame")
 	private List<PlayerGameAttempt> attempts;
 
@@ -69,17 +72,6 @@ public class PlayerGame {
 	public void setAttempts(List<PlayerGameAttempt> attempts) {
 		this.attempts = attempts;
 	}
-/*
-	public Integer getTotalScore() {
-		int totalScore = 0;
-		for (PlayerGameAttempt attempt : getAttempts()) {
-			if (attempt.isLegalAttempt()) {
-				totalScore += attempt.getTotalScore();
-			}
-		}
-		return totalScore;
-	}
-*/
 
 	public int getTotalScore() {
 		return totalScore;
@@ -123,6 +115,14 @@ public class PlayerGame {
 
 	public void setDartCount(int dartCount) {
 		this.dartCount = dartCount;
+	}
+
+	public boolean isFinished() {
+		return isFinished;
+	}
+
+	public void setFinished(boolean isFinished) {
+		this.isFinished = isFinished;
 	}
 }
 

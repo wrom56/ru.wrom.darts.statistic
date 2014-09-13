@@ -1,8 +1,9 @@
 package ru.wrom.darts.statistic.ui.controller;
 
 import ru.wrom.darts.statistic.persist.entity.GameType;
+import ru.wrom.darts.statistic.ui.controller.gamemanager.AllDoubleGameManager;
 import ru.wrom.darts.statistic.ui.controller.gamemanager.BullGameManager;
-import ru.wrom.darts.statistic.ui.controller.gamemanager.Game501Manager;
+import ru.wrom.darts.statistic.ui.controller.gamemanager.GameX01Manager;
 import ru.wrom.darts.statistic.ui.controller.gamemanager.Sector60GameManager;
 
 public class GameManagerFactory {
@@ -13,8 +14,10 @@ public class GameManagerFactory {
 				return new BullGameManager();
 			case SECTOR_ATTEMPT:
 				return new Sector60GameManager();
-		case GAME_501:
-			return new Game501Manager();
+			case GAME_501:
+				return new GameX01Manager(GameType.GAME_501);
+			case ALL_DOUBLE:
+				return new AllDoubleGameManager();
 		}
 		throw new IllegalArgumentException();
 	}

@@ -4,49 +4,49 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class RecordRow {
-	private StringProperty recordType = new SimpleStringProperty();
-	private StringProperty absoluteValue = new SimpleStringProperty();
-	private StringProperty sameDartValue = new SimpleStringProperty();
+	private StringProperty recordLabel = new SimpleStringProperty();
+	private StringProperty bestValue = new SimpleStringProperty();
+	private StringProperty avgValue = new SimpleStringProperty();
 
-	public RecordRow(String recordType, String absoluteValue, String sameDartValue) {
-		setRecordType(recordType);
-		setAbsoluteValue(absoluteValue);
-		setSameDartValue(sameDartValue);
+	public RecordRow(String recordLabel, String bestValue, String avgValue) {
+		setRecordLabel(recordLabel);
+		setBestValue(bestValue);
+		setAvgValue(avgValue);
 	}
 
-	public String getRecordType() {
-		return recordType.get();
+	public String getRecordLabel() {
+		return recordLabel.get();
 	}
 
-	public StringProperty recordTypeProperty() {
-		return recordType;
+	public StringProperty recordLabelProperty() {
+		return recordLabel;
 	}
 
-	public void setRecordType(String recordType) {
-		this.recordType.set(recordType);
+	public void setRecordLabel(String recordLabel) {
+		this.recordLabel.set(recordLabel);
 	}
 
-	public String getAbsoluteValue() {
-		return absoluteValue.get();
+	public String getBestValue() {
+		return bestValue.get();
 	}
 
-	public StringProperty absoluteValueProperty() {
-		return absoluteValue;
+	public StringProperty bestValueProperty() {
+		return bestValue;
 	}
 
-	public void setAbsoluteValue(String absoluteValue) {
-		this.absoluteValue.set(absoluteValue);
+	public void setBestValue(String bestValue) {
+		this.bestValue.set(bestValue);
 	}
 
-	public String getSameDartValue() {
-		return sameDartValue.get();
+	public String getAvgValue() {
+		return avgValue.get();
 	}
 
-	public StringProperty sameDartValueProperty() {
-		return sameDartValue;
+	public StringProperty avgValueProperty() {
+		return avgValue;
 	}
 
-	public void setSameDartValue(String sameDartValue) {
-		this.sameDartValue.set(sameDartValue);
+	public void setAvgValue(String avgValue) {
+		this.avgValue.set(avgValue);
 	}
 }

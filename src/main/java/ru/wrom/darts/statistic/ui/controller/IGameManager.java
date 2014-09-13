@@ -20,10 +20,6 @@ public interface IGameManager {
 
 	String getAttemptTip(PlayerGame playerGame, String dart1Score, String dart2Score);
 
-	default int getStartScore() {
-		return 0;
-	}
-
 	default boolean isEndOfGame(Game game) {
 		return game.getPlayerGames().get(game.getPlayerGames().size() - 1).getDartCount() == DartsConstants.TRAINING_ATTEMPT_COUNT * 3;
 	}
