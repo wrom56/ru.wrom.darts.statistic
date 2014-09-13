@@ -1,4 +1,4 @@
-package ru.wrom.darts.statistic.persist.repository;
+package ru.wrom.darts.statistic.persist.repository.crud;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;

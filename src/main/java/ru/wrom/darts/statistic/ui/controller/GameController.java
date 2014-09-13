@@ -19,8 +19,9 @@ import ru.wrom.darts.statistic.entrypoint.DartsStatisticApplication;
 import ru.wrom.darts.statistic.persist.entity.Game;
 import ru.wrom.darts.statistic.persist.entity.PlayerGame;
 import ru.wrom.darts.statistic.persist.entity.PlayerGameAttempt;
-import ru.wrom.darts.statistic.persist.repository.GameCrudRepository;
+import ru.wrom.darts.statistic.persist.repository.crud.GameCrudRepository;
 import ru.wrom.darts.statistic.ui.model.AttemptRow;
+import ru.wrom.darts.statistic.ui.model.RecordRow;
 import ru.wrom.darts.statistic.ui.model.ScoreRow;
 import ru.wrom.darts.statistic.util.SpringBeans;
 import ru.wrom.darts.statistic.util.Utils;
@@ -32,9 +33,8 @@ import java.util.stream.Collectors;
 public class GameController {
 
 
-	public static final String INCORRECT_SCORE_STYLE = "incorrectScore";
+	public static final String INCORRECT_SCORE_STYLE = "incorrect-score";
 	public Label attemptTipLabel;
-
 
 	private Game game;
 	private IGameManager gameManager;
@@ -49,8 +49,13 @@ public class GameController {
 	public TableColumn<ScoreRow, Integer> scoreTableScoreColumn;
 
 	public TableView<AttemptRow> attemptsTable;
-	public TableColumn attemptsTableHeaderColumn;
+	public TableColumn<AttemptRow, String> attemptsTableHeaderColumn;
 	public TableColumn<AttemptRow, Integer> attemptsTableNumberColumn;
+
+	public TableView<RecordRow> recordTable;
+	public TableColumn<RecordRow, String> recordTableRecordTypeColumn;
+	public TableColumn<RecordRow, String> recordTableAbsoluteValueColumn;
+	public TableColumn<RecordRow, String> recordTableSameDartValueColumn;
 
 	public Button score0Button;
 	public Button score1Button;
@@ -67,17 +72,12 @@ public class GameController {
 
 	public void init(Game game) {
 
+		scoreTable.setSelectionModel(null);
 		scoreTablePlayerColumn.setCellValueFactory(cellData -> cellData.getValue().playerNameProperty());
 		scoreTableScoreColumn.setCellValueFactory(cellData -> cellData.getValue().scoreProperty().asObject());
 		scoreTableDartCountColumn.setCellValueFactory(cellData -> cellData.getValue().dartCountProperty().asObject());
 
 		attemptsTableNumberColumn.setCellValueFactory(cellData -> cellData.getValue().attemptNumberProperty().asObject());
-	/*	attemptsTableTotalColumn.setCellValueFactory(cellData -> cellData.getValue().totalScoreProperty().asObject());
-		attemptsTableDart1Column.setCellValueFactory(cellData -> cellData.getValue().dart1ScoreProperty());
-		attemptsTableDart2Column.setCellValueFactory(cellData -> cellData.getValue().dart2ScoreProperty());
-		attemptsTableDart3Column.setCellValueFactory(cellData -> cellData.getValue().dart3ScoreProperty());
-*/
-
 
 		for (int i = 0; i < game.getPlayerGames().size(); i++) {
 			TableColumn<AttemptRow, String> column = new TableColumn<>();
@@ -87,11 +87,12 @@ public class GameController {
 			attemptsTableHeaderColumn.getColumns().add(column);
 		}
 
-/*		column = new TableColumn<>();
-		column.setText("Player 2");
+		recordTableRecordTypeColumn.setCellValueFactory(cellData -> cellData.getValue().recordTypeProperty());
+		recordTableAbsoluteValueColumn.setCellValueFactory(cellData -> cellData.getValue().absoluteValueProperty());
+		recordTableSameDartValueColumn.setCellValueFactory(cellData -> cellData.getValue().sameDartValueProperty());
 
-		attemptsTableHeaderColumn.getColumns().add(column);
-*/
+
+		ObservableList<RecordRow> recordRowList = FXCollections.observableArrayList();
 
 
 		ObservableMap<KeyCombination, Runnable> accelerators = score1Button.getScene().getAccelerators();
@@ -397,17 +398,15 @@ public class GameController {
 
 		if (validateResult.isEmpty()) {
 			attempt.setLegalAttempt(gameManager.isLegalAttempt(currentPlayerGame, attempt));
-			int dartCount = gameManager.getAttemptDartCount(currentPlayerGame, attempt);
+			attempt.setDartCount(gameManager.getAttemptDartCount(currentPlayerGame, attempt));
 			if (attempt.getDart1Score() != null) {
-				if (attempt.getDart2Score() == null && dartCount >= 2) {
+				if (attempt.getDart2Score() == null && attempt.getDartCount() >= 2) {
 					attempt.setDart2Score("0");
 				}
-				if (attempt.getDart3Score() == null && dartCount == 3) {
+				if (attempt.getDart3Score() == null && attempt.getDartCount() == 3) {
 					attempt.setDart3Score("0");
 				}
 			}
-
-			currentPlayerGame.setDartCount(currentPlayerGame.getDartCount() + dartCount);
 			currentPlayerGame.addAttempt(attempt);
 			refreshForm();
 
@@ -571,10 +570,7 @@ public class GameController {
 
 	public void cancelLastAttempt() {
 		PlayerGame playerGame = getPreviousPlayerGame();
-		if (playerGame.getAttempts().size() > 0) {
-			playerGame.getAttempts().remove(playerGame.getAttempts().size() - 1);
-			playerGame.setDartCount(playerGame.getAttempts().size() * 3);
-		}
+		playerGame.removeLastAttempt();
 		currentPlayerGame = playerGame;
 		isGameOver = false;
 		startNextAttempt();

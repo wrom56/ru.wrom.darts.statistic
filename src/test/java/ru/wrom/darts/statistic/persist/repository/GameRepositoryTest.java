@@ -1,7 +1,5 @@
 package ru.wrom.darts.statistic.persist.repository;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,31 +7,24 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import ru.wrom.darts.statistic.entrypoint.SpringConfig;
-import ru.wrom.darts.statistic.persist.entity.Dart;
-import ru.wrom.darts.statistic.persist.repository.crud.DartCrudRepository;
-
+import ru.wrom.darts.statistic.persist.entity.GameType;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = SpringConfig.class, loader = AnnotationConfigContextLoader.class)
-public class DartCrudRepositoryTest {
+public class GameRepositoryTest {
 
 	@Autowired
-	DartCrudRepository dartCrudRepository;
-
-	@Before
-	public void setUp() throws Exception {
-
-	}
-
-	@After
-	public void tearDown() throws Exception {
-
-	}
+	GameRepository gameRepository;
 
 	@Test
 	public void testName() throws Exception {
-		Dart dart = new Dart();
-		dart.setLabel("Dart");
-		dartCrudRepository.save(dart);
+/*
+		Query query = em.createQuery("select avg(pg.totalScore) from PlayerGame pg where pg.game.gameType = :gameType");
+		query.setParameter("gameType", GameType.BULL);
+		System.out.println("!!!!!!!!!!!!!");
+		System.out.println(query.getSingleResult());
+		System.out.println("!!!!!!!!!!!!!");
+	*/
+		System.out.println(gameRepository.getMaxScore(GameType.BULL, null));
 	}
 }

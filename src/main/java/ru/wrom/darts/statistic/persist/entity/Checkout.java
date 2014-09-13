@@ -1,9 +1,6 @@
 package ru.wrom.darts.statistic.persist.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Checkout {
@@ -11,6 +8,7 @@ public class Checkout {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
+	@Column(nullable = false)
 	private int finishScore;
 
 	private String dart1Score;

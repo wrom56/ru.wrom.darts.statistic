@@ -10,7 +10,7 @@ public class ApplicationInfo {
 	private Integer id;
 
 
-	@Column
+	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastRunTime;
 

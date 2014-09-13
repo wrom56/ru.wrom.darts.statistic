@@ -10,8 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.wrom.darts.statistic.persist.entity.*;
-import ru.wrom.darts.statistic.persist.repository.CheckoutCrudRepository;
-import ru.wrom.darts.statistic.persist.repository.PlayerCrudRepository;
+import ru.wrom.darts.statistic.persist.repository.crud.CheckoutCrudRepository;
+import ru.wrom.darts.statistic.persist.repository.crud.PlayerCrudRepository;
 import ru.wrom.darts.statistic.ui.controller.GameController;
 import ru.wrom.darts.statistic.util.SpringBeans;
 
@@ -67,7 +67,7 @@ public class DartsStatisticApplication extends Application {
 
 	public void initRootLayout() {
 		try {
-			rootLayout = new FXMLLoader().load(DartsStatisticApplication.class.getResource("/form/root.fxml"));
+			rootLayout = FXMLLoader.load(DartsStatisticApplication.class.getResource("/form/root.fxml"));
 			Scene scene = new Scene(rootLayout);
 			primaryStage.setScene(scene);
 			primaryStage.show();

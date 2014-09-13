@@ -1,13 +1,9 @@
 package ru.wrom.darts.statistic.ui.controller;
 
 import javafx.event.ActionEvent;
-
 import ru.wrom.darts.statistic.entrypoint.DartsStatisticApplication;
 import ru.wrom.darts.statistic.persist.entity.GameType;
 
-/**
- * Created by wrom on 18.08.2014.
- */
 public class RootController {
 
 	public void openTrainingBullForm() {

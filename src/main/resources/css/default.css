@@ -12,14 +12,18 @@
 
 
 
-.scoreButton {
+.score-button {
 	-fx-font-size: 36px;
 }
 
-.incorrectScore {
+.incorrect-score {
 	-fx-border-color: red;
 }
 
 .attempt-tip-label {
 	-fx-font-size: 36px;
+}
+
+.score-text {
+	-fx-font-size: 24px;
 }

@@ -23,9 +23,11 @@ public class PlayerGameAttempt {
 	private String dart2Score;
 	private String dart3Score;
 
-	private Integer totalScore;
+	private int totalScore;
 
 	private boolean isLegalAttempt;
+
+	private int dartCount;
 
 	public Integer getId() {
 		return id;
@@ -113,6 +115,14 @@ public class PlayerGameAttempt {
 			return 1;
 		}
 		return null;
+	}
+
+	public int getDartCount() {
+		return dartCount;
+	}
+
+	public void setDartCount(int dartCount) {
+		this.dartCount = dartCount;
 	}
 
 	@Transient

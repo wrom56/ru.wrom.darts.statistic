@@ -3,38 +3,45 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.text.Font?>
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ru.wrom.darts.statistic.ui.controller.GameController">
     <children>
-        <GridPane layoutX="333.0" layoutY="368.0" prefHeight="555.0" prefWidth="771.0" AnchorPane.bottomAnchor="0.0"
-                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <GridPane prefHeight="555.0" prefWidth="771.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <columnConstraints>
-                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="1.7976931348623157E308"
-                                   minWidth="10.0" percentWidth="45.0" prefWidth="371.0"/>
-                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="1.7976931348623157E308"
-                                   minWidth="10.0" percentWidth="10.0" prefWidth="371.0"/>
-                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="421.0" minWidth="10.0"
-                                   percentWidth="45.0" prefWidth="318.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints maxHeight="509.0" minHeight="10.0" prefHeight="166.0" vgrow="SOMETIMES"/>
-                <RowConstraints maxHeight="466.0" minHeight="10.0" prefHeight="139.0" valignment="CENTER"
-                                vgrow="SOMETIMES"/>
-                <RowConstraints maxHeight="466.0" minHeight="10.0" prefHeight="227.0" valignment="CENTER"
-                                vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
             </rowConstraints>
             <children>
-                <VBox alignment="CENTER" spacing="10.0">
+                <GridPane>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints/>
+                        <ColumnConstraints/>
+                        <ColumnConstraints/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" percentHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" percentHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" percentHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" percentHeight="15.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
                     <children>
-                        <TableView fx:id="scoreTable" styleClass="score-table" GridPane.rowIndex="2">
+                        <TableView fx:id="scoreTable" focusTraversable="false" styleClass="score-table">
                             <columns>
-                                <TableColumn fx:id="scoreTableHeaderColumn" prefWidth="102.0">
+                                <TableColumn fx:id="scoreTableHeaderColumn" editable="false" prefWidth="102.0"
+                                             sortable="false">
                                     <columns>
-                                        <TableColumn fx:id="scoreTablePlayerColumn" prefWidth="102.0"
-                                                     styleClass="score-table-player-column"/>
-                                        <TableColumn fx:id="scoreTableScoreColumn" prefWidth="122.0" text="Score"/>
-                                        <TableColumn fx:id="scoreTableDartCountColumn" prefWidth="41.0" text="Darts"/>
+                                        <TableColumn fx:id="scoreTablePlayerColumn" editable="false" prefWidth="102.0"
+                                                     sortable="false" styleClass="score-table-player-column"/>
+                                        <TableColumn fx:id="scoreTableScoreColumn" editable="false" prefWidth="122.0"
+                                                     sortable="false" text="Score"/>
+                                        <TableColumn fx:id="scoreTableDartCountColumn" editable="false" prefWidth="41.0"
+                                                     sortable="false" text="Darts"/>
                                     </columns>
                                 </TableColumn>
                             </columns>
@@ -45,92 +52,122 @@
                                 <Insets/>
                             </opaqueInsets>
                             <GridPane.margin>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                <Insets/>
                             </GridPane.margin>
                         </TableView>
-                    </children>
-                    <GridPane.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-                    </GridPane.margin>
-                </VBox>
-                <VBox alignment="CENTER" spacing="10.0" GridPane.columnIndex="2">
-                    <children>
-                        <TableView fx:id="attemptsTable" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                            <columns>
-                                <TableColumn fx:id="attemptsTableHeaderColumn" editable="false" prefWidth="91.0"
-                                             sortable="false" text="Attempts">
-                                    <columns>
-                                        <TableColumn fx:id="attemptsTableNumberColumn" editable="false" maxWidth="500.0"
-                                                     sortable="false" text="№"/>
-                                    </columns>
-                                </TableColumn>
-                            </columns>
-                            <GridPane.margin>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-                            </GridPane.margin>
-                            <columnResizePolicy>
-                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-                            </columnResizePolicy>
-                        </TableView>
-                    </children>
-                    <GridPane.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-                    </GridPane.margin>
-                </VBox>
-                <GridPane GridPane.rowIndex="2">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="20.0" prefWidth="100.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="20.0" prefWidth="100.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="20.0" prefWidth="100.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints maxHeight="64.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES"/>
-                        <RowConstraints maxHeight="105.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES"/>
-                        <RowConstraints maxHeight="43.0" minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES"/>
-                    </rowConstraints>
-                    <children>
-                        <TextField fx:id="dart1ScoreTextField" alignment="CENTER" maxHeight="1.7976931348623157E308"
-                                   maxWidth="1.7976931348623157E308" GridPane.rowIndex="1">
-                            <GridPane.margin>
-                                <Insets bottom="20.0" left="20.0" top="20.0"/>
-                            </GridPane.margin>
-                            <font>
-                                <Font size="18.0"/>
-                            </font>
-                        </TextField>
-                        <TextField fx:id="dart2ScoreTextField" alignment="CENTER" maxHeight="1.7976931348623157E308"
-                                   maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                            <GridPane.margin>
-                                <Insets bottom="20.0" left="15.0" right="5.0" top="20.0"/>
-                            </GridPane.margin>
-                            <font>
-                                <Font size="24.0"/>
-                            </font>
-                        </TextField>
-                        <TextField fx:id="dart3ScoreTextField" alignment="CENTER" maxHeight="1.7976931348623157E308"
-                                   maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                            <GridPane.margin>
-                                <Insets bottom="20.0" left="10.0" right="10.0" top="20.0"/>
-                            </GridPane.margin>
-                            <font>
-                                <Font size="24.0"/>
-                            </font>
-                        </TextField>
-                        <TextField fx:id="totalScoreTextField" alignment="CENTER" maxHeight="1.7976931348623157E308"
-                                   maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                        <GridPane hgap="20.0" vgap="20.0" GridPane.rowIndex="1">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" percentHeight="50.0" prefHeight="30.0"
+                                                vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" percentHeight="50.0" prefHeight="30.0"
+                                                vgrow="SOMETIMES"/>
+                            </rowConstraints>
+                            <children>
+                                <Button fx:id="score1Button" contentDisplay="CENTER" maxHeight="1.7976931348623157E308"
+                                        maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
+                                        mnemonicParsing="false" onAction="#onClickScore1Button"
+                                        styleClass="score-button" textAlignment="CENTER">
+                                    <GridPane.margin>
+                                        <Insets/>
+                                    </GridPane.margin>
+                                </Button>
+                                <Button fx:id="score2Button" contentDisplay="TOP" maxHeight="1.7976931348623157E308"
+                                        maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                        onAction="#onClickScore2Button" styleClass="score-button"
+                                        GridPane.columnIndex="1">
+                                    <GridPane.margin>
+                                        <Insets/>
+                                    </GridPane.margin>
+                                </Button>
+                                <Button fx:id="score3Button" maxHeight="1.7976931348623157E308"
+                                        maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                        onAction="#onClickScore3Button" styleClass="score-button"
+                                        GridPane.columnIndex="2">
+                                    <GridPane.margin>
+                                        <Insets/>
+                                    </GridPane.margin>
+                                </Button>
+                                <Button fx:id="score0Button" contentDisplay="CENTER" maxHeight="1.7976931348623157E308"
+                                        maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
+                                        mnemonicParsing="false" onAction="#onClickScore0Button"
+                                        styleClass="score-button" textAlignment="CENTER" GridPane.columnSpan="3"
+                                        GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1"
+                                        GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                                    <GridPane.margin>
+                                        <Insets/>
+                                    </GridPane.margin>
+                                </Button>
+                            </children>
                             <GridPane.margin>
                                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
                             </GridPane.margin>
-                            <font>
-                                <Font size="24.0"/>
-                            </font>
-                        </TextField>
+                        </GridPane>
+                        <GridPane hgap="10.0" GridPane.rowIndex="2">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="20.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="20.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="20.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="40.0"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+                            </rowConstraints>
+                            <children>
+                                <TextField fx:id="dart3ScoreTextField" alignment="CENTER"
+                                           maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                           styleClass="score-text" GridPane.columnIndex="2">
+                                    <GridPane.margin>
+                                        <Insets/>
+                                    </GridPane.margin>
+                                    <HBox.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                    </HBox.margin>
+                                </TextField>
+                                <TextField fx:id="dart1ScoreTextField" alignment="CENTER"
+                                           maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                           styleClass="score-text">
+                                    <GridPane.margin>
+                                        <Insets/>
+                                    </GridPane.margin>
+                                    <HBox.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                    </HBox.margin>
+                                </TextField>
+                                <TextField fx:id="dart2ScoreTextField" alignment="CENTER"
+                                           maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                           styleClass="score-text" GridPane.columnIndex="1">
+                                    <GridPane.margin>
+                                        <Insets/>
+                                    </GridPane.margin>
+                                    <HBox.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                    </HBox.margin>
+                                </TextField>
+                                <TextField fx:id="totalScoreTextField" alignment="CENTER"
+                                           maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                           styleClass="score-text" GridPane.columnIndex="3">
+                                    <GridPane.margin>
+                                        <Insets/>
+                                    </GridPane.margin>
+                                    <HBox.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                    </HBox.margin>
+                                </TextField>
+                            </children>
+                            <GridPane.margin>
+                                <Insets bottom="40.0" top="40.0"/>
+                            </GridPane.margin>
+                        </GridPane>
                         <Button fx:id="enterScoreButton" contentDisplay="CENTER" maxHeight="1.7976931348623157E308"
                                 maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
                                 mnemonicParsing="false" onAction="#onClickSubmitScoreButton" text="Submit"
                                 textAlignment="CENTER" GridPane.columnSpan="4" GridPane.hgrow="NEVER"
-                                GridPane.rowIndex="2" GridPane.vgrow="NEVER">
+                                GridPane.rowIndex="3" GridPane.vgrow="NEVER">
                             <font>
                                 <Font size="24.0"/>
                             </font>
@@ -139,86 +176,66 @@
                             </GridPane.margin>
                         </Button>
                     </children>
+                    <GridPane.margin>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                    </GridPane.margin>
                 </GridPane>
-                <VBox alignment="CENTER" spacing="10.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                <GridPane vgap="20.0" GridPane.columnIndex="1">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" percentHeight="45.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" percentHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" percentHeight="45.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
                     <children>
-                        <Label text="Records" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-                        <TableView GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <Label fx:id="attemptTipLabel" alignment="CENTER" maxHeight="1.7976931348623157E308"
+                               maxWidth="1.7976931348623157E308" prefHeight="41.0" prefWidth="198.0"
+                               styleClass="attempt-tip-label" text="Label" textAlignment="CENTER"
+                               GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                            <GridPane.margin>
+                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                            </GridPane.margin>
+                        </Label>
+                        <TableView fx:id="recordTable" prefHeight="214.0" prefWidth="165.0" GridPane.rowIndex="2">
                             <columnResizePolicy>
                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
                             </columnResizePolicy>
                             <columns>
-                                <TableColumn editable="false" prefWidth="75.0" resizable="false" sortable="false"/>
-                                <TableColumn editable="false" prefWidth="87.0" resizable="false" sortable="false"
-                                             text="Average"/>
-                                <TableColumn editable="false" prefWidth="150.0" resizable="false" sortable="false"
-                                             text="Max"/>
+                                <TableColumn prefWidth="75.0" text="Records">
+                                    <columns>
+                                        <TableColumn fx:id="recordTableRecordTypeColumn" prefWidth="75.0"/>
+                                        <TableColumn fx:id="recordTableAbsoluteValueColumn" prefWidth="75.0"
+                                                     text="Absolute"/>
+                                        <TableColumn fx:id="recordTableSameDartValueColumn" prefWidth="75.0"
+                                                     text="Same dart"/>
+                                    </columns>
+                                </TableColumn>
+                            </columns>
+                        </TableView>
+                        <TableView fx:id="attemptsTable">
+                            <columns>
+                                <TableColumn fx:id="attemptsTableHeaderColumn" editable="false" prefWidth="91.0"
+                                             sortable="false" text="Attempts">
+                                    <columns>
+                                        <TableColumn fx:id="attemptsTableNumberColumn" editable="false" sortable="false"
+                                                     text="№"/>
+                                    </columns>
+                                </TableColumn>
                             </columns>
                             <GridPane.margin>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                <Insets/>
                             </GridPane.margin>
+                            <columnResizePolicy>
+                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                            </columnResizePolicy>
                         </TableView>
                     </children>
                     <GridPane.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-                    </GridPane.margin>
-                </VBox>
-                <GridPane GridPane.rowIndex="1">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" percentHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="10.0" percentHeight="155.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                        <RowConstraints minHeight="10.0" percentHeight="90.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                    </rowConstraints>
-                    <children>
-                        <Button fx:id="score1Button" contentDisplay="CENTER" maxHeight="1.7976931348623157E308"
-                                maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
-                                mnemonicParsing="false" onAction="#onClickScore1Button" styleClass="scoreButton"
-                                textAlignment="CENTER" GridPane.rowIndex="1">
-                            <GridPane.margin>
-                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-                            </GridPane.margin>
-                        </Button>
-                        <Button fx:id="score2Button" contentDisplay="TOP" maxHeight="1.7976931348623157E308"
-                                maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                                onAction="#onClickScore2Button" styleClass="scoreButton" GridPane.columnIndex="1"
-                                GridPane.rowIndex="1">
-                            <GridPane.margin>
-                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-                            </GridPane.margin>
-                        </Button>
-                        <Button fx:id="score3Button" maxHeight="1.7976931348623157E308"
-                                maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                                onAction="#onClickScore3Button" styleClass="scoreButton" GridPane.columnIndex="2"
-                                GridPane.rowIndex="1">
-                            <GridPane.margin>
-                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-                            </GridPane.margin>
-                        </Button>
-                        <Button fx:id="score0Button" contentDisplay="CENTER" maxHeight="1.7976931348623157E308"
-                                maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
-                                mnemonicParsing="false" onAction="#onClickScore0Button" styleClass="scoreButton"
-                                textAlignment="CENTER" GridPane.columnSpan="3" GridPane.halignment="CENTER"
-                                GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER"
-                                GridPane.vgrow="ALWAYS">
-                            <GridPane.margin>
-                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-                            </GridPane.margin>
-                        </Button>
-                    </children>
-                </GridPane>
-                <Label fx:id="attemptTipLabel" alignment="CENTER" maxHeight="1.7976931348623157E308"
-                       maxWidth="1.7976931348623157E308" prefHeight="41.0" prefWidth="198.0"
-                       styleClass="attempt-tip-label" text="Label" textAlignment="CENTER" GridPane.columnIndex="2"
-                       GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-                    <GridPane.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
                     </GridPane.margin>
-                </Label>
+                </GridPane>
             </children>
         </GridPane>
     </children>

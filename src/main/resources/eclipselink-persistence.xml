@@ -10,6 +10,7 @@
         <class>ru.wrom.darts.statistic.persist.entity.ApplicationInfo</class>
         <class>ru.wrom.darts.statistic.persist.entity.PlayerGameAttempt</class>
         <class>ru.wrom.darts.statistic.persist.entity.PlayerGame</class>
+        <class>ru.wrom.darts.statistic.persist.entity.Checkout</class>
 
 
         <properties>

@@ -23,10 +23,7 @@ public class Utils {
 	}
 
 	public static boolean isDoubleSectorScore(String score) {
-		if (isEmpty(score)) {
-			return false;
-		}
-		return ("D".contains(String.valueOf(score.charAt(0))));
+		return !isEmpty(score) && ("D".contains(String.valueOf(score.charAt(0))));
 	}
 
 	public static String getAttemptScore(PlayerGameAttempt attempt) {

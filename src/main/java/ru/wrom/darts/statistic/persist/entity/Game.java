@@ -11,12 +11,15 @@ public class Game {
 	private Integer id;
 
 	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
 	private GameType gameType;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false)
 	private Date startDate;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false)
 	private Date endDate;
 
 	private Player winner;

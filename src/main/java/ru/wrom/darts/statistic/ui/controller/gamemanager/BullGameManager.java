@@ -35,13 +35,13 @@ public class BullGameManager implements IGameManager {
 	@Override
 	public List<ScoreElement> validateAttempt(PlayerGame playerGame, PlayerGameAttempt attempt) {
 		List<ScoreElement> result = new ArrayList<>();
-		if (!isValidDartScore(attempt.getDart1Score())) {
+		if (isIncorrectDartScore(attempt.getDart1Score())) {
 			result.add(ScoreElement.DART1);
 		}
-		if (!isValidDartScore(attempt.getDart2Score())) {
+		if (isIncorrectDartScore(attempt.getDart2Score())) {
 			result.add(ScoreElement.DART2);
 		}
-		if (!isValidDartScore(attempt.getDart3Score())) {
+		if (isIncorrectDartScore(attempt.getDart3Score())) {
 			result.add(ScoreElement.DART3);
 		}
 
@@ -51,7 +51,7 @@ public class BullGameManager implements IGameManager {
 		return result;
 	}
 
-	private boolean isValidDartScore(String dartScore) {
-		return Utils.getScoreAsInt(dartScore) % 25 == 0;
+	private boolean isIncorrectDartScore(String dartScore) {
+		return Utils.getScoreAsInt(dartScore) % 25 != 0;
 	}
 }

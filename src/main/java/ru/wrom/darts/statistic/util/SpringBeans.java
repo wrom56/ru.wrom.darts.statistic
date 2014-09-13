@@ -3,8 +3,8 @@ package ru.wrom.darts.statistic.util;
 
 import org.springframework.beans.BeansException;
 import ru.wrom.darts.statistic.entrypoint.DartsStatisticApplication;
-import ru.wrom.darts.statistic.persist.repository.ApplicationInfoCrudRepository;
-import ru.wrom.darts.statistic.persist.repository.DartCrudRepository;
+import ru.wrom.darts.statistic.persist.repository.crud.ApplicationInfoCrudRepository;
+import ru.wrom.darts.statistic.persist.repository.crud.DartCrudRepository;
 
 public class SpringBeans {
 

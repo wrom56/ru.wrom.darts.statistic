@@ -22,6 +22,8 @@ public class PlayerGame {
 
 	private int dartCount;
 
+	private int totalScore;
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "PlayerGame")
 	private List<PlayerGameAttempt> attempts;
 
@@ -42,12 +44,27 @@ public class PlayerGame {
 
 	public void addAttempt(PlayerGameAttempt attempt) {
 		getAttempts().add(attempt);
+		dartCount += attempt.getDartCount();
+		if (attempt.isLegalAttempt()) {
+			totalScore += attempt.getTotalScore();
+		}
 	}
+
+	public void removeLastAttempt() {
+		if (getAttempts().size() > 0) {
+			PlayerGameAttempt removedAttempt = getAttempts().remove(getAttempts().size() - 1);
+			dartCount -= removedAttempt.getDartCount();
+			if (removedAttempt.isLegalAttempt()) {
+				totalScore -= removedAttempt.getTotalScore();
+			}
+		}
+	}
+
 
 	public void setAttempts(List<PlayerGameAttempt> attempts) {
 		this.attempts = attempts;
 	}
-
+/*
 	public Integer getTotalScore() {
 		int totalScore = 0;
 		for (PlayerGameAttempt attempt : getAttempts()) {
@@ -55,6 +72,11 @@ public class PlayerGame {
 				totalScore += attempt.getTotalScore();
 			}
 		}
+		return totalScore;
+	}
+*/
+
+	public int getTotalScore() {
 		return totalScore;
 	}
 

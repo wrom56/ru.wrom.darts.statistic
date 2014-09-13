@@ -8,7 +8,7 @@ public class Dart {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
-	@Column
+	@Column(nullable = false)
 	private String label;
 
 	public Integer getId() {

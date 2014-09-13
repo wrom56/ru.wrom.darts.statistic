@@ -9,7 +9,7 @@ public class Player {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
-	@Column
+	@Column(nullable = false)
 	private String name;
 
 	public Integer getId() {

@@ -8,6 +8,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import ru.wrom.darts.statistic.entrypoint.SpringConfig;
 import ru.wrom.darts.statistic.persist.entity.Game;
+import ru.wrom.darts.statistic.persist.repository.crud.GameCrudRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = SpringConfig.class, loader = AnnotationConfigContextLoader.class)

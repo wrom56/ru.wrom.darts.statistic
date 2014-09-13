@@ -16,9 +16,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "ru.wrom.darts.statistic.persist.repository")
+@EnableJpaRepositories(basePackages = "ru.wrom.darts.statistic.persist.repository.crud")
 @EnableTransactionManagement
-@ComponentScan("ru.wrom.darts.statistic.dao")
+@ComponentScan("ru.wrom.darts.statistic.persist.repository")
 public class SpringConfig {
 
 	@Bean
