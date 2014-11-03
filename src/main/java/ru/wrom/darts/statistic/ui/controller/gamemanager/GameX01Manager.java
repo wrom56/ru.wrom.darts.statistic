@@ -4,11 +4,7 @@ import ru.wrom.darts.statistic.entrypoint.DartsStatisticApplication;
 import ru.wrom.darts.statistic.persist.entity.*;
 import ru.wrom.darts.statistic.ui.controller.GameInfo;
 import ru.wrom.darts.statistic.ui.controller.IGameManager;
-import ru.wrom.darts.statistic.ui.controller.ScoreButton;
 import ru.wrom.darts.statistic.util.Utils;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class GameX01Manager implements IGameManager {
 
@@ -16,21 +12,6 @@ public class GameX01Manager implements IGameManager {
 
 	public GameX01Manager(GameType gameType) {
 		this.gameType = gameType;
-	}
-
-	@Override
-	public List<ScoreButton> getScoreButtons(GameInfo gameInfo) {
-		return Arrays.asList(new ScoreButton("0"), new ScoreButton("25"), new ScoreButton("50"));
-	}
-
-	@Override
-	public List<List<String>> getScoreButtonValues() {
-		return Arrays.asList(null, null, null, null);
-	}
-
-	@Override
-	public List<String> getScoreButtonLabels() {
-		return Arrays.asList("-", "-", "-", "-");
 	}
 
 	@Override

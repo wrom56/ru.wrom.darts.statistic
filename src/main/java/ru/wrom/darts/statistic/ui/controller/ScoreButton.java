@@ -1,6 +1,7 @@
 package ru.wrom.darts.statistic.ui.controller;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,6 +22,14 @@ public class ScoreButton {
 	public ScoreButton(String value) {
 		this.label = value;
 		this.values = Arrays.asList(value);
+	}
+
+	public static List<ScoreButton> buildScoreButtons(String... values) {
+		List<ScoreButton> scoreButtons = new ArrayList<>();
+		for (String value : values) {
+			scoreButtons.add(new ScoreButton(value));
+		}
+		return scoreButtons;
 	}
 
 	public String getLabel() {

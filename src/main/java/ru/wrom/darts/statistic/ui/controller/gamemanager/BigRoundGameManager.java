@@ -79,41 +79,10 @@ public class BigRoundGameManager implements IGameManager {
 		return result;
 	}
 
-	/*
-			@Override
-			public List<ScoreElement> validateAttempt(GameInfo gameInfo) {
-				List<ScoreElement> result = new ArrayList<>();
-				if (isCorrectDartScore(attempt.getDart1Score())) {
-					result.add(ScoreElement.DART1);
-				}
-				if (isCorrectDartScore(attempt.getDart2Score())) {
-					result.add(ScoreElement.DART2);
-				}
-				if (isCorrectDartScore(attempt.getDart3Score())) {
-					result.add(ScoreElement.DART3);
-				}
-
-				if (attempt.getTotalScore() % 25 != 0 || attempt.getTotalScore() > 150) {
-					result.add(ScoreElement.TOTAL);
-				}
-				return result;
-			}
-		*/
-	@Override
-	public List<List<String>> getScoreButtonValues() {
-		return null;
-	}
-
-	@Override
-	public List<String> getScoreButtonLabels() {
-		return null;
-	}
-
 	@Override
 	public String getGameLabel() {
 		return "Big round";
 	}
-
 
 	private boolean isCorrectDartScore(String dartScore, Integer attemptNumber) {
 		if (dartScore == null) {
