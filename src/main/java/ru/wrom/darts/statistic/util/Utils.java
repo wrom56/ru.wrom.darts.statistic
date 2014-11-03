@@ -52,6 +52,29 @@ public class Utils {
 		return sb.toString();
 	}
 
+	public static int calculateTotal(String dart1Score, String dart2Score, String dart3Score) {
+		return getScoreAsInt(dart1Score) + getScoreAsInt(dart2Score) + getScoreAsInt(dart3Score);
+	}
+
+	public static String getAttemptTipScoreLabel(String dart1Score, String dart2Score, String dart3Score) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(calculateTotal(dart1Score, dart2Score, dart3Score));
+		if (dart1Score != null) {
+			sb.append(" = ");
+			sb.append(getDartScoreLabel(dart1Score));
+			if (dart2Score != null) {
+				sb.append(" + ");
+				sb.append(getDartScoreLabel(dart2Score));
+				if (dart3Score != null) {
+					sb.append(" + ");
+					sb.append(getDartScoreLabel(dart3Score));
+				}
+			}
+		}
+		return sb.toString();
+	}
+
+
 	public static String getDartScoreLabel(String dartScore) {
 		if (dartScore != null && dartScore.equals("50")) {
 			return "BULL";
@@ -148,6 +171,10 @@ public class Utils {
 		} catch (NumberFormatException e) {
 			return false;
 		}
+	}
+
+	public static String getDartScore(String dartScore) {
+		return isValidDartScore(dartScore) ? dartScore : null;
 	}
 
 	public static List<ScoreElement> validateAttempt(PlayerGameAttempt attempt) {

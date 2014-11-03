@@ -62,7 +62,8 @@ public class DartsStatisticApplication extends Application {
 		initRootLayout();
 		//openDartListForm();
 		//openTrainingBullForm(GameType.BULL);
-		openTrainingBullForm(GameType.GAME_501);
+		openTrainingBullForm(GameType.BIG_ROUND);
+		//openTrainingBullForm(GameType.GAME_501);
 	}
 
 	public void initRootLayout() {

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration status="error" monitorinterval="30">
+    <properties>
+        <property name="pattern">%d{iso8601} %-5level %c{1.}(%F:%L) - %m%n</property>
+    </properties>
+    <appenders>
+        <console name="console" target="SYSTEM_OUT">
+            <patternlayout pattern="${pattern}"/>
+        </console>
+        <file name="root" filename="d:\work\workspace\log\svrs\root.log">
+            <patternlayout pattern="${pattern}"/>
+        </file>
+    </appenders>
+
+    <loggers>
+
+        <logger name="ru.wrom" level="trace" additivity="false">
+            <appenderref ref="console"/>
+        </logger>
+
+        <root level="error">
+            <appenderref ref="console"/>
+        </root>
+    </loggers>
+</configuration>

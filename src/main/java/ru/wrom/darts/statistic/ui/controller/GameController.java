@@ -5,7 +5,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.event.ActionEvent;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -104,12 +103,12 @@ public class GameController {
 		recordTable.setItems(recordRowList);
 
 		ObservableMap<KeyCombination, Runnable> accelerators = score1Button.getScene().getAccelerators();
-		accelerators.put(new KeyCodeCombination(KeyCode.NUMPAD0), () -> score0Button.fire());
-		accelerators.put(new KeyCodeCombination(KeyCode.NUMPAD1), () -> score1Button.fire());
-		accelerators.put(new KeyCodeCombination(KeyCode.NUMPAD2), () -> score2Button.fire());
-		accelerators.put(new KeyCodeCombination(KeyCode.NUMPAD3), () -> score3Button.fire());
+		accelerators.put(new KeyCodeCombination(KeyCode.NUMPAD0), score0Button::fire);
+		accelerators.put(new KeyCodeCombination(KeyCode.NUMPAD1), score1Button::fire);
+		accelerators.put(new KeyCodeCombination(KeyCode.NUMPAD2), score2Button::fire);
+		accelerators.put(new KeyCodeCombination(KeyCode.NUMPAD3), score3Button::fire);
 
-		accelerators.put(new KeyCodeCombination(KeyCode.ENTER), () -> onPressEnter());
+		accelerators.put(new KeyCodeCombination(KeyCode.ENTER), this::onPressEnter);
 
 		dart1ScoreTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
 			if (newValue) {
@@ -135,13 +134,10 @@ public class GameController {
 		this.gameManager = GameManagerFactory.buildGameManager(game.getGameType());
 
 		scoreTableHeaderColumn.setText(gameManager.getGameLabel());
-		score0Button.setText(gameManager.getScoreButtonLabels().get(0));
-		score1Button.setText(gameManager.getScoreButtonLabels().get(1));
-		score2Button.setText(gameManager.getScoreButtonLabels().get(2));
-		score3Button.setText(gameManager.getScoreButtonLabels().get(3));
+
 
 		ObservableList<ScoreRow> playerScoreList = FXCollections.observableArrayList();
-		playerScoreList.addAll(game.getPlayerGames().stream().map(playerGame -> new ScoreRow(playerGame)).collect(Collectors.toList()));
+		playerScoreList.addAll(game.getPlayerGames().stream().map(ScoreRow::new).collect(Collectors.toList()));
 		scoreTable.setItems(playerScoreList);
 
 		currentPlayerGame = game.getPlayerGames().get(0);
@@ -275,6 +271,14 @@ public class GameController {
 	}
 
 	public void refreshForm() {
+
+		List<ScoreButton> scoreButtons = gameManager.getScoreButtons(buildGameInfo());
+		score0Button.setText(scoreButtons.size() > 0 ? scoreButtons.get(0).getLabel() : "");
+		score1Button.setText(scoreButtons.size() > 1 ? scoreButtons.get(1).getLabel() : "");
+		score2Button.setText(scoreButtons.size() > 2 ? scoreButtons.get(2).getLabel() : "");
+		score3Button.setText(scoreButtons.size() > 3 ? scoreButtons.get(3).getLabel() : "");
+
+
 		enterScoreButton.setDisable(isGameOver);
 		score0Button.setDisable(isGameOver);
 		score1Button.setDisable(isGameOver);
@@ -330,26 +334,26 @@ public class GameController {
 	}
 
 	public void onClickScore0Button() {
-		onClickScoreButton(gameManager.getScoreButtonValues().get(0));
+		onClickScoreButton(getScoreButton(0));
 	}
 
 	public void onClickScore1Button() {
-		onClickScoreButton(gameManager.getScoreButtonValues().get(1));
+		onClickScoreButton(getScoreButton(1));
 	}
 
 	public void onClickScore2Button() {
-		onClickScoreButton(gameManager.getScoreButtonValues().get(2));
+		onClickScoreButton(getScoreButton(2));
 	}
 
 	public void onClickScore3Button() {
-		onClickScoreButton(gameManager.getScoreButtonValues().get(3));
+		onClickScoreButton(getScoreButton(3));
 	}
 
-	private void onClickScoreButton(List<String> scoreButtonValues) {
-		if (scoreButtonValues == null) {
+	private void onClickScoreButton(ScoreButton scoreButton) {
+		if (scoreButton == null) {
 			return;
 		}
-		for (String score : scoreButtonValues) {
+		for (String score : scoreButton.getValues()) {
 			setDartScore(currentDartNumber, score);
 			if (currentDartNumber == 3) {
 				submitCurrentAttemptScore();
@@ -359,6 +363,11 @@ public class GameController {
 			}
 		}
 		refreshForm();
+	}
+
+	private ScoreButton getScoreButton(Integer index) {
+		List<ScoreButton> scoreButtons = gameManager.getScoreButtons(buildGameInfo());
+		return scoreButtons.size() > index ? scoreButtons.get(index) : null;
 	}
 
 	private void setDartScore(Integer dartNumber, String score) {
@@ -401,7 +410,7 @@ public class GameController {
 			if (attempt == null) {
 				return;
 			}
-			validateResult = gameManager.validateAttempt(currentPlayerGame, attempt);
+			validateResult = gameManager.validateAttempt(new GameInfo(currentPlayerGame, attempt));
 		}
 
 
@@ -522,8 +531,11 @@ public class GameController {
 	}
 
 	private void refreshAttemptTip() {
-		attemptTipLabel.setText(gameManager.getAttemptTip(currentPlayerGame, Utils.isValidDartScore(dart1ScoreTextField.getText()) ? dart1ScoreTextField.getText() : null,
-				Utils.isValidDartScore(dart2ScoreTextField.getText()) ? dart2ScoreTextField.getText() : null));
+		attemptTipLabel.setText(gameManager.getAttemptTip(buildGameInfo()));
+	}
+
+	private GameInfo buildGameInfo() {
+		return new GameInfo(currentPlayerGame, Utils.getDartScore(dart1ScoreTextField.getText()), Utils.getDartScore(dart2ScoreTextField.getText()));
 	}
 
 	private void nextPlayer() {
@@ -542,7 +554,7 @@ public class GameController {
 		}
 	}
 
-	public void onClickSubmitScoreButton(ActionEvent actionEvent) {
+	public void onClickSubmitScoreButton() {
 		submitCurrentAttemptScore();
 	}
 
@@ -588,4 +600,5 @@ public class GameController {
 		startNextAttempt();
 		refreshForm();
 	}
+
 }

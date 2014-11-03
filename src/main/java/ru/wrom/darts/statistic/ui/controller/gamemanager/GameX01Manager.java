@@ -2,7 +2,9 @@ package ru.wrom.darts.statistic.ui.controller.gamemanager;
 
 import ru.wrom.darts.statistic.entrypoint.DartsStatisticApplication;
 import ru.wrom.darts.statistic.persist.entity.*;
+import ru.wrom.darts.statistic.ui.controller.GameInfo;
 import ru.wrom.darts.statistic.ui.controller.IGameManager;
+import ru.wrom.darts.statistic.ui.controller.ScoreButton;
 import ru.wrom.darts.statistic.util.Utils;
 
 import java.util.Arrays;
@@ -14,6 +16,11 @@ public class GameX01Manager implements IGameManager {
 
 	public GameX01Manager(GameType gameType) {
 		this.gameType = gameType;
+	}
+
+	@Override
+	public List<ScoreButton> getScoreButtons(GameInfo gameInfo) {
+		return Arrays.asList(new ScoreButton("0"), new ScoreButton("25"), new ScoreButton("50"));
 	}
 
 	@Override
@@ -32,8 +39,8 @@ public class GameX01Manager implements IGameManager {
 	}
 
 	@Override
-	public String getAttemptTip(PlayerGame playerGame, String dart1Score, String dart2Score) {
-		int currentScore = gameType.getStartScore() - playerGame.getTotalScore() - Utils.getScoreAsInt(dart1Score) - Utils.getScoreAsInt(dart2Score);
+	public String getAttemptTip(GameInfo gameInfo) {
+		int currentScore = gameType.getStartScore() - gameInfo.getGame().getTotalScore() - Utils.getScoreAsInt(gameInfo.getCurrentAttempt().getDart1Score()) - Utils.getScoreAsInt(gameInfo.getCurrentAttempt().getDart2Score());
 
 		Checkout checkout = DartsStatisticApplication.getInstance().getCheckoutMap().get(currentScore);
 

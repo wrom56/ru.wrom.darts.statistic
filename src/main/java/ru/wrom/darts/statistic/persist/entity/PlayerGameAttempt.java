@@ -137,5 +137,4 @@ public class PlayerGameAttempt {
 		}
 		return getDartScoreList().get(dartNumber - 1);
 	}
-
 }

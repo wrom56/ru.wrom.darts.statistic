@@ -12,13 +12,19 @@ import java.util.List;
 
 public interface IGameManager {
 
+	List<ScoreButton> getScoreButtons(GameInfo gameInfo);
+
+	default List<ScoreElement> validateAttempt(GameInfo gameInfo) {
+		return Collections.emptyList();
+	}
+
 	List<List<String>> getScoreButtonValues();
 
 	List<String> getScoreButtonLabels();
 
 	String getGameLabel();
 
-	String getAttemptTip(PlayerGame playerGame, String dart1Score, String dart2Score);
+	String getAttemptTip(GameInfo gameInfo);
 
 	default boolean isEndOfGame(Game game) {
 		return game.getPlayerGames().get(game.getPlayerGames().size() - 1).getDartCount() == DartsConstants.TRAINING_ATTEMPT_COUNT * 3;
